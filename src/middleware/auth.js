@@ -6,7 +6,7 @@ module.exports = async (request, response, next) => {
         const token = await request.headers.authorization.split(" ")[1];
 
         //check if the token matches the supposed origin
-        const decodedToken = await jwt.verify(token, "YOUR-ACCESS-TOKEN-SECRET");
+        const decodedToken = await jwt.verify(token, process.env.JWT_REFRESH_TOKEN_SECRECT);
 
         // retrieve the user details of the logged in user
         const user = await decodedToken;

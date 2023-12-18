@@ -36,7 +36,7 @@ const loginUser = (request, response) => {
                             userId: user._id,
                             email: user.email,
                         },
-                        process.env.JWT_SCRECT_TOKEN_SECRECT,
+                        process.env.JWT_REFRESH_TOKEN_SECRECT,
                         { expiresIn: "7d" } // set the expiration as per your requirements
                     );
 

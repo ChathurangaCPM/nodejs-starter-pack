@@ -17,7 +17,7 @@ const refreshTokenHandler = (request, response) => {
             // verify refresh token
             jwt.verify(
                 refreshToken,
-                process.env.JWT_SCRECT_TOKEN_SECRECT,
+                process.env.JWT_REFRESH_TOKEN_SECRECT,
                 (err, decoded) => {
                     if (err) return response.sendStatus(403); // Invalid refresh token
 
