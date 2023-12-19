@@ -2,8 +2,13 @@ const jwt = require("jsonwebtoken");
 const User = require('../../db/models/userModel');
 const refreshTokenHandler = (request, response) => {
     const cookies = request.cookies;
+    // const authorizationHeader = request.headers['authorization'];
+    
+    // if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+    //     return response.sendStatus(401);
+    // }
 
-    if (!cookies?.jwt) return response.sendStatus(401);
+    // const accessToken = authorizationHeader.split(' ')[1];
 
     const refreshToken = cookies.jwt;
 

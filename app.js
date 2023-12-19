@@ -40,6 +40,11 @@ app.use(cookieParser());
 
 
 // this is a auth required route (Protected)
+app.get("/users", (request, response, next) => {
+  response.json({ message: "Hey! This is your server response!" });
+  next();
+});
+
 app.get("/test", auth, (request, response, next) => {
   response.json({ message: "Hey! This is your server response!" });
   next();

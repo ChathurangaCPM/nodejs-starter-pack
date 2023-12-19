@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         unique: true,
     },
+    accessToken: {
+        type: String,
+        unique: true,
+    },
     // Reference to UserMeta schema
     userMeta: {
         type: mongoose.Schema.Types.ObjectId,

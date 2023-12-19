@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require('../../db/models/userModel');
+const UserToken = require('../../db/models/userToken');
 require('dotenv').config();
 
 const loginUser = (request, response) => {
@@ -27,7 +28,7 @@ const loginUser = (request, response) => {
                             email: user.email,
                         },
                         process.env.JWT_ACCESS_TOKEN_SECRECT,
-                        { expiresIn: "24h" }
+                        { expiresIn: "3s" }
                     );
 
                     // create refresh token
@@ -42,6 +43,7 @@ const loginUser = (request, response) => {
 
                     // store the refresh token in your database or cache
                     user.refreshToken = refreshToken;
+                    user.accessToken = accessToken;
                     user.save();
 
                     response.cookie('jwt', refreshToken, {
