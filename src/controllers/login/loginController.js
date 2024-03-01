@@ -2,9 +2,21 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require('../../db/models/userModel');
 const UserToken = require('../../db/models/userToken');
+const useragent = require('useragent');
+
 require('dotenv').config();
 
 const loginUser = (request, response) => {
+
+    const userAgentString = request.headers['user-agent'];
+    const agent = useragent.parse(userAgentString);
+
+    const device = agent.device.toString();
+    const os = agent.os.toString();
+    const browser = agent.toAgent();
+
+    const ipAddress = request.ip;
+
     // check if email exists
     User.findOne({ email: request.body.email })
         // if email exists
@@ -28,7 +40,7 @@ const loginUser = (request, response) => {
                             email: user.email,
                         },
                         process.env.JWT_ACCESS_TOKEN_SECRECT,
-                        { expiresIn: "3s" }
+                        { expiresIn: "10s" }
                     );
 
                     // create refresh token
@@ -41,24 +53,34 @@ const loginUser = (request, response) => {
                         { expiresIn: "7d" } // set the expiration as per your requirements
                     );
 
-                    // store the refresh token in your database or cache
-                    user.refreshToken = refreshToken;
-                    user.accessToken = accessToken;
-                    user.save();
 
-                    response.cookie('jwt', refreshToken, {
-                        httpOnly: true, 
-                        sameSite: 'None', 
-                        // secure: true, 
-                        maxAge: 24 * 60 * 60 * 1000
-                    })
+                    // Store the access token in the database
+                    const accessTokenData = new UserToken({
+                        userId: user._id,
+                        accessToken: accessToken,
+                        refreshToken: refreshToken,
+                        device,
+                        os,
+                        browser,
+                        ipAddress
+                    });
 
-                    // return success response with access and refresh tokens
-                    
+                    accessTokenData.save();
+
                     response.status(200).send({
                         message: "Login Successful",
-                        user: user,
+                        user: {
+                            id: user._id,
+                            email: user.email,
+                            roles: user.roles,
+                            isEmailVerified: user.isEmailVerified,
+                            isDeleted: user.isDeleted,
+                            createdAt: user.createdAt,
+                            updatedAt: user.updatedAt,
+                            // __v: user.__v
+                        },
                         accessToken,
+                        refreshToken
                     });
                 })
                 // catch error if password does not match

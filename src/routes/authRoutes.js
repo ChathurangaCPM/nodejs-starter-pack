@@ -1,5 +1,10 @@
 const express = require("express");
 const router = express.Router();
+
+const verifyJWT = require('../middleware/verifyJWT');
+
+const { verifyAccessToken } = require("../middleware/verifyAccessToken");
+
 // Login related function here
 const loginController = require('../controllers/login/loginController');
 // registation related function here
@@ -9,7 +14,8 @@ const refreshTokenController = require("../controllers/refresh/refreshController
 
 const logoutController = require("../controllers/logout/logoutController");
 
-const verifyJWT = require('../middleware/verifyJWT');
+
+
 
 router.post("/login", loginController.loginUser);
 
@@ -19,8 +25,13 @@ router.get("/refresh", refreshTokenController.refreshTokenHandler);
 // logout user / remove serverside JWT cookies 
 router.get("/logout", logoutController.logoutHandler);
 
+router.post('/verifyToken', verifyAccessToken, (req, res) => {
+    // If the middleware reached here, the token is valid
+    res.sendStatus(200);
+});
+
 // an example for verified data
-router.get("/employed", verifyJWT, (req, res) => {
+router.get("/employed", verifyAccessToken, (req, res) => {
     res.status(200).send({
         message: "Successful access",
     });

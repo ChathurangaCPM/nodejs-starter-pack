@@ -7,15 +7,26 @@ const userTokenSchema = new mongoose.Schema({
     accessToken: {
         type: String,
     },
-    // Add other user-related fields here
-    // ...
-
-    // Reference to User schema
+    userId: {
+        type: String,
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
-});
+    device: {
+        type: String,
+    },
+    os: {
+        type: String,
+    },
+    browser: {
+        type: String,
+    },
+    ipAddress: {
+        type: String,
+    }
+}, { timestamps: true });
 
 const UserToken = mongoose.model('UserToken', userTokenSchema);
 
