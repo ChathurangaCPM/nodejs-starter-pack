@@ -12,7 +12,7 @@ const credentials = require("./src/middleware/credentials");
 
 // Routes
 const authRoutes = require('./src/routes/authRoutes');
-const corsOptions = require("./src/config/corsOptions");
+// const corsOptions = require("./src/config/corsOptions");
 const errorHandler = require("./src/middleware/errorHandler");
 
 dbConnect();
@@ -22,6 +22,12 @@ dbConnect();
 app.use(credentials);
 
 // Cross Origin Resource Sharing
+
+// Allow requests from your React app during development
+const corsOptions = {
+  credentials: true,
+  origin: 'http://localhost:3000', // Replace with your React app's origin
+};
 app.use(cors(corsOptions));
 
 // built-in middleware to handle urlencoded form data

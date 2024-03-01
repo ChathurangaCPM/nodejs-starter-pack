@@ -49,7 +49,7 @@ const loginUser = (request, response) => {
                     response.cookie('jwt', refreshToken, {
                         httpOnly: true, 
                         sameSite: 'None', 
-                        secure: true, 
+                        // secure: true, 
                         maxAge: 24 * 60 * 60 * 1000
                     })
 
@@ -107,6 +107,7 @@ const logoutUser = (request, response) => {
             });
         });
 };
+
 
 
 module.exports = { loginUser, logoutUser };

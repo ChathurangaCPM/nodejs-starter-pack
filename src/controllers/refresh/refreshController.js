@@ -10,6 +10,8 @@ const refreshTokenHandler = (request, response) => {
 
     // const accessToken = authorizationHeader.split(' ')[1];
 
+    console.log('req.cookies.sessionCookie ===', request);
+
     const refreshToken = cookies.jwt;
 
     // check refreshToken
